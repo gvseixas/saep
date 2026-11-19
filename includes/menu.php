@@ -37,4 +37,13 @@ $ativo = function ($prefixo) use ($pagina) {
             <a href="movimentacoes.php" class="nav-link <?= $ativo('movimentac') ?>">🔄 Movimentações</a>
             <a href="saidas.php"        class="nav-link <?= $ativo('saidas') ?>">📤 Saídas</a>
         </nav>
+
+        <!-- ADICIONADO: Usuário logado, perfil e botão de logout -->
+        <?php if (!empty($_SESSION['usuario'])): ?>
+            <div class="p-3 border-t border-gray-800 text-xs text-gray-300">
+                <p class="font-bold text-white truncate"><?= htmlspecialchars($_SESSION['usuario']['nome']) ?></p>
+                <p class="text-gray-400 mb-2"><?= htmlspecialchars($_SESSION['usuario']['perfil']) ?></p>
+                <a href="logout.php" class="nav-link text-red-400 hover:text-white">🚪 Sair</a>
+            </div>
+        <?php endif; ?>
     </aside>

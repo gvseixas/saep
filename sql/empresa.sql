@@ -2,6 +2,15 @@ DROP DATABASE IF EXISTS empresa;
 CREATE DATABASE empresa CHARACTER SET utf8 COLLATE utf8_danish_ci;
 USE empresa;
 
+ALTER TABLE `user`
+    ADD COLUMN email VARCHAR(120) UNIQUE AFTER nome,
+    ADD COLUMN senha VARCHAR(255) AFTER email,
+    ADD COLUMN perfil ENUM('OPERADOR', 'ADMIN') NOT NULL DEFAULT 'OPERADOR' AFTER senha;
+    
+    UPDATE `user` SET email = 'admin@empresa.com', senha = '123', perfil = 'ADMIN' WHERE id_user = 1;
+    INSERT INTO `user` (nome, email, senha, perfil) VALUES
+	('Operador Almoxarifado', 'operador@empresa.com', '123', 'OPERADOR');
+    
 -- DROP TABLES
 DROP TABLE IF EXISTS movimentacao CASCADE;
 DROP TABLE IF EXISTS produto CASCADE;
