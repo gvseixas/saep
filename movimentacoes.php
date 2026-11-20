@@ -1,11 +1,14 @@
 <?php
 session_start();
 require_once __DIR__ . '/conexao.php';
+require_once __DIR__ . '/middlewares/auth.php'; // <--- ADICIONADO
+$usuarioLogado = exigirLogin();                 // <--- ADICIONADO
 
 $sucesso = "";
 $erro = "";
 
 if (isset($_GET["excluir"])) {
+    exigirAdmin();                              // <--- ADICIONADO (bloqueia Operador)
     $st = $pdo->prepare("DELETE FROM movimentacao WHERE id_movimentacao = ?");
     $st->execute([$_GET["excluir"]]);
     if ($st->rowCount() > 0) {
@@ -90,7 +93,10 @@ $movimentacoes = $pdo->query($sql)->fetchAll();
                             <td class="px-4 py-3 text-center text-gray-600"><?= htmlspecialchars($m["usuario"] ?? "-") ?></td>
                             <td class="px-4 py-3 text-center">
                                 <div class="flex items-center justify-center gap-1.5">
-                                    <a onclick="return confirm('Tem certeza disso?')" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition" href="?excluir=<?= $m["id_movimentacao"] ?>">Excluir</a>
+                                    <!-- ADICIONADO: Só exibe botão Excluir para ADMIN -->
+                                    <?php if (isAdmin()): ?>
+                                        <a onclick="return confirm('Tem certeza disso?')" class="bg-senai-red text-white text-xs px-2.5 py-1.5 rounded-md hover:bg-red-700 transition" href="?excluir=<?= $m["id_movimentacao"] ?>">Excluir</a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
